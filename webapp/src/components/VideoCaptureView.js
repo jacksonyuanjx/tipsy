@@ -124,7 +124,7 @@ export default function VideoCaptureView() {
         body: JSON.stringify({
           sdp: offer.sdp,
           type: offer.type,
-          video_transform: 'edges'
+          video_transform: 'face'
         }),
         headers: {
           'Content-Type': 'application/json'
@@ -141,6 +141,10 @@ export default function VideoCaptureView() {
   }, []);
 
   const handleStart = useCallback(stream => {
+    // const script = document.createElement("script");
+    // script.async = true;
+    // script.src = "./sketch.js";
+    // document.body.appendChild(script);
     setRecording(true);
     setStreamToVideo(stream);
     pc = createPeerConnection();
@@ -172,7 +176,9 @@ export default function VideoCaptureView() {
               <div className='spinner'>
                 <PushSpinner size={30} />
               </div>
-              <video className='raw-video' ref={videoRef} autoPlay></video>
+              {/* <script src="./sketch.js"></script> */}
+              <p id="status">TEST WORDS</p>
+              <video id="status" className='raw-video' ref={videoRef} autoPlay></video>
               <video className='processed-video' ref={receivedVideoRef} autoPlay></video>
             </div>
           )

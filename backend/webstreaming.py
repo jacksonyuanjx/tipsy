@@ -121,6 +121,10 @@ time.sleep(2.0)
 def serve_js(path):
 	return send_from_directory("js", path)
 
+@app.route("/olt")
+def olt():
+	return render_template("olt.html")
+
 @app.route("/")
 def index():
 	# return the rendered template

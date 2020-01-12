@@ -14,6 +14,15 @@ from av import VideoFrame
 from aiortc import MediaStreamTrack, RTCPeerConnection, RTCSessionDescription
 from aiortc.contrib.media import MediaBlackhole, MediaPlayer, MediaRecorder
 
+from labels import analyze_labels
+from face import find_face
+import time
+# from pyimagesearch.motion_detection.singlemotiondetector import SingleMotionDetector
+# import imutils
+
+from google.cloud import storage
+
+
 ROOT = os.path.dirname(__file__)
 
 logger = logging.getLogger("pc")
@@ -35,6 +44,9 @@ detector_params.maxArea = 300;
 detector_params.filterByColor = True;
 detector_params.blobColor = 0; # 0 for dark blobs & 255 for light blobs
 detector = cv2.SimpleBlobDetector_create(detector_params)
+
+
+from gcpBucketHelper import upload_blob
 
 
 def detect_faces(img, cascade):
@@ -98,6 +110,69 @@ def blob_process(img, threshold, detector):
 		print("Response (strength): ", kp.response) # FIXME: always 0.0 for some reason?
 	return keypoints
 
+# def detect_motion(frameCount):
+# 	# grab global references to the video stream, output frame, and
+# 	# lock variables
+#     # global vs, outputFrame, lock
+ 
+# 	# initialize the motion detector and the total number of frames
+# 	# read thus far
+#     md = SingleMotionDetector(accumWeight=0.1)
+#     # total = 0
+
+#     # loop over frames from the video stream
+#     while True:
+# 		# read the next frame from the video stream, resize it,
+# 		# convert the frame to grayscale, and blur it
+#         frame = vs.read()
+#         frame = imutils.resize(frame, width=400)
+#         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+#         gray = cv2.GaussianBlur(gray, (7, 7), 0)
+ 
+# 		# # grab the current timestamp and draw it on the frame
+# 		# timestamp = datetime.datetime.now()
+# 		# cv2.putText(frame, timestamp.strftime(
+# 		# 	"%A %d %B %Y %I:%M:%S%p"), (10, frame.shape[0] - 10),
+# 		# 	cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
+        
+#         # # if the total number of frames has reached a sufficient
+# 		# # number to construct a reasonable background model, then
+# 		# # continue to process the frame
+# 		# if total > frameCount:
+# 		# 	# detect motion in the image
+# 		# 	motion = md.detect(gray)
+ 
+# 		# 	# check to see if motion was found in the frame
+# 		# 	if motion is not None:
+# 		# 		# unpack the tuple and draw the box surrounding the
+# 		# 		# "motion area" on the output frame
+# 		# 		(thresh, (minX, minY, maxX, maxY)) = motion
+# 		# 		cv2.rectangle(frame, (minX, minY), (maxX, maxY),
+# 		# 			(0, 0, 255), 2)
+#         face_frame = detect_faces(frame, face_cascade)
+#         if face_frame is not None:
+#             eyes = detect_eyes(face_frame, eye_cascade)
+#             for eye in eyes:
+#                 if eye is not None:
+#                     # threshold = r = cv2.getTrackbarPos('threshold', 'image')
+#                     eye = cut_eyebrows(eye)
+#                     keypoints = blob_process(eye, 50, detector)
+#                     eye = cv2.drawKeypoints(eye, keypoints, eye, (0, 0, 255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+		
+# 		# update the background model and increment the total number
+# 		# of frames read thus far
+#         md.update(gray)
+#         # total += 1
+ 
+# 		# acquire the lock, set the output frame, and release the
+# 		# lock
+#         # with lock:
+#         #     outputFrame = frame.copy()
+
+# cap = cv2.VideoCapture(0)
+vid_cod = cv2.VideoWriter_fourcc(*'MJPG')
+output = cv2.VideoWriter("videos/cam_video.avi", vid_cod, 20.0, (640,480))
+
 class VideoTransformTrack(MediaStreamTrack):
     """
     A video stream track that transforms frames from an another track.
@@ -112,22 +187,54 @@ class VideoTransformTrack(MediaStreamTrack):
 
     async def recv(self):
         frame = await self.track.recv()
+        # ret, frame = cap.read()
+
+        # frame = imutils.resize(frame, width=400)
+        # gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        # gray = cv2.GaussianBlur(gray, (7, 7), 0)
+
+        # md = SingleMotionDetector(accumWeight=0.1)
+    
 
         if self.transform == "edges":
             # perform edge detection
+            print(frame)
             img = frame.to_ndarray(format="bgr24")
-            img = cv2.cvtColor(cv2.Canny(img, 100, 200), cv2.COLOR_GRAY2BGR)
+            # img = cv2.cvtColor(cv2.Canny(img, 100, 200), cv2.COLOR_GRAY2BGR)
 
             # rebuild a VideoFrame, preserving timing information
             new_frame = VideoFrame.from_ndarray(img, format="bgr24")
             new_frame.pts = frame.pts
             new_frame.time_base = frame.time_base
+            print(new_frame)
+            # if cap.isOpened()==False:
+            #     print("attempting to force open cap")
+            #     cap.open(-1)
+            # ret, frameToWrite = cap.read()
+            print(ret)
+            print("startTime: ", time.time())
+            t_end = time.time() + 5
+            while time.time() < t_end:
+                # print(time.time())
+                output.write(new_frame)
+                # print("in while()")
+            print("endTime: ", time.time())
+
             return new_frame
         elif self.transform == "tipsy":
             # todo
-            frame = imutils.resize(frame, width=400)
-            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            gray = cv2.GaussianBlur(gray, (7, 7), 0)
+            # print("startTime: ", time.time())
+            # t_end = time.time() + 5
+            # while time.time() < t_end:
+            #     output.write(frame)
+            #     print("in while()")
+            # print("endTime: ", time.time())
+
+            # print("attempting to upload to bucket")
+            # upload_blob("testnwhacks", "/root/server/videos/sean_drunk.mp4", "test.mp4")
+            # print("upload complete")
+            # analyze_labels("gs://testnwhacks/sean_drunk.mp4")
+            img = frame.to_ndarray(format="bgr24")
 
             face_frame = detect_faces(frame, face_cascade)
             if face_frame is not None:
@@ -138,8 +245,14 @@ class VideoTransformTrack(MediaStreamTrack):
                         eye = cut_eyebrows(eye)
                         keypoints = blob_process(eye, 50, detector)
                         eye = cv2.drawKeypoints(eye, keypoints, eye, (0, 0, 255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
-                        return eye;
-
+                        return eye
+            
+            # update the background model and increment the total number
+            # of frames read thus far
+            # md.update(gray)
+        elif self.transform == "face":
+            img = frame.to_ndarray(format="bgr24")
+            find_face(img)
         elif self.transform == "rotate":
             # rotate image
             img = frame.to_ndarray(format="bgr24")
