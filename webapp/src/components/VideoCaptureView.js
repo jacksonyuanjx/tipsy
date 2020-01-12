@@ -6,6 +6,7 @@ import { PushSpinner } from "react-spinners-kit";
 var pc = null;
 
 const Styles = styled.div`
+position: relative;
 height: 100%;
 > * {
   height: 100%;
@@ -18,16 +19,23 @@ height: 100%;
     left: 50%;
     top: 50%;
     transform: translateX(-50%);
+    z-index: 0;
   }
   .raw-video {
     position: absolute;
     left: 1rem;
     bottom: 1rem;
     width: 20%;
+    z-index: 3;
   }
   .processed-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
     width: 100%;
     height: 100%;
+    z-index: 2;
   }
   .status-label {
     position: absolute;
@@ -41,6 +49,7 @@ height: 100%;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
     border-radius: 0.3rem;
+    z-index: 3;
   }
 }
 `;
