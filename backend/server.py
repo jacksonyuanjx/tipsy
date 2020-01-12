@@ -127,6 +127,11 @@ def stop_record():
     global next_command
     video_out.release()
     next_command = None
+    print("attempting to upload video to GCP Bucket")
+    upload_blob("testnwhacks", "videos/processed.mp4", "testVideo2.mp4")
+    print("video has been uploaded")
+    analyze_labels("gs://testnwhacks/testVideo2.mp4")
+    print("ANALYSIS COMPLETE")
 
 
 class VideoTransformTrack(MediaStreamTrack):
@@ -150,7 +155,7 @@ class VideoTransformTrack(MediaStreamTrack):
         if self.transform == "edges":
             # perform edge detection
             img = frame.to_ndarray(format="bgr24")
-            img = cv2.cvtColor(cv2.Canny(img, 100, 200), cv2.COLOR_GRAY2BGR)
+            # img = cv2.cvtColor(cv2.Canny(img, 100, 200), cv2.COLOR_GRAY2BGR)
 
             # save to file
             if next_command is not None:
