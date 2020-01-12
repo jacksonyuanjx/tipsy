@@ -15,6 +15,13 @@ const Styles = styled.div`
   border-radius: 1rem;
   font-size: 2rem;
   text-align: center;
+
+  .failure {
+    border: 3px solid red;
+  }
+  .warning {
+    border: 3px solid orange;
+  }
 `;
 
 export default function Banner() {

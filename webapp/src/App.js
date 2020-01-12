@@ -9,6 +9,7 @@ import DetectionView from './components/DetectionView';
 import { Navbar } from 'react-bootstrap';
 import styled from 'styled-components';
 import Banner from './components/Banner';
+import DebugPanel from './components/DebugPanel';
 
 const history = createBrowserHistory();
 
@@ -42,6 +43,7 @@ function App() {
           </div>
           <Banner />
         </BrowserRouter>
+        <DebugPanel />
       </Provider>
     </Styles>
   );
