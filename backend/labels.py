@@ -69,6 +69,10 @@ def analyze_labels(path):
             print('\tSegment {}: {}'.format(i, positions))
             print('\tConfidence: {}'.format(confidence))
         print('\n')
+        if segment_label.entity.description=="standing":
+            pass
+        elif segment_label.entity.description=="dancing":
+            pass
     # [END video_label_tutorial_parse_response]
 
 
