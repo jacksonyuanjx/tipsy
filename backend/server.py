@@ -138,7 +138,7 @@ def stop_record():
 
 def send_command(command_name, command_content={}):
     global _whatsnext
-    _whatsnext = { 'command': command_name, content: command_content }
+    _whatsnext = { 'command': command_name, 'content': command_content }
 
 class VideoTransformTrack(MediaStreamTrack):
     """
