@@ -64,11 +64,25 @@ export default function DetectionView() {
   useEffect(() => {
     if (step !== 0) return;
     const listener = e => {
-      dispatch(bannerActions.set('primary', 'Facial Passed'))
-      setTimeout(() => {
-        dispatch(bannerActions.clear)
+      if (e.key === 'c') {
+        dispatch(bannerActions.set('primary', 'Facial Passed'))
+        window.removeEventListener('keydown', listener)
+        setTimeout(() => {
+          dispatch(bannerActions.clear)
+          dispatch(stepActions.next)
+        }, 3000);
+      }
+    };
+    window.addEventListener('keydown', listener)
+    return () => window.removeEventListener('keydown', listener);
+  }, [dispatch, step])
+
+  useEffect(() => {
+    const listener = e => {
+      if (step >= 3) return;
+      if (e.key === 'n') {
         dispatch(stepActions.next)
-      }, 3000);
+      }
     };
     window.addEventListener('keydown', listener)
     return () => window.removeEventListener('keydown', listener);
