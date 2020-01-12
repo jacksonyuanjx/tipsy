@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import UnlockView from './UnlockView';
 import RedDot from './RedDot';
 import RecordControl from './RecordControl';
-import { serverAction } from '../redux/actions';
+import { serverAction, bannerActions, stepActions } from '../redux/actions';
 import { HOST } from '../config';
 
 const Styles = styled.div`
@@ -60,6 +60,16 @@ export default function DetectionView() {
       })
     }
   }, [step]);
+
+  useEffect(() => {
+    window.addEventListener('keydown', e => {
+      dispatch(bannerActions.set('primary', 'Facial Passed'))
+      setTimeout(() => {
+        dispatch(bannerActions.clear)
+        dispatch(stepActions.next)
+      }, 3000);
+    })
+  }, [dispatch])
 
   return <Styles>
     {getViewForStep(step)}

@@ -66,9 +66,13 @@ export function serverAction(key) {
           method: 'GET'
         }).then(async response => {
           const result = await response.json();
-          console.log('received command', result);
+          if (JSON.stringify(result) !== '{}') console.log('received command', result);
           if (result.command === 'FACIAL_RECOG') {
-            dispatch(stepActions.next)
+            dispatch(bannerActions.set('primary', result.content))
+            setTimeout(() => {
+              dispatch(bannerActions.clear)
+              dispatch(stepActions.next)
+            }, 3000);
           }
         }).catch(i => i); // don't catch :-)
         break;
