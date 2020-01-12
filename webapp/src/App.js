@@ -1,25 +1,36 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import store from './redux/store';
+import { Provider } from 'react-redux';
+import { Switch, BrowserRouter, Route } from 'react-router-dom';
+import { createBrowserHistory } from 'history';
+import IdelView from './components/IdleView';
+import DetectionView from './components/DetectionView';
+import { Container, Row, Col } from 'react-bootstrap';
+
+const history = createBrowserHistory();
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={store}>
+      <BrowserRouter history={history}>
+        <Container>
+          <Row>
+            <Col>
+              <h1>Tipsy</h1>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <Switch>
+                <Route path='/' exact component={IdelView} />
+                <Route path='/detect' exact component={DetectionView} />
+              </Switch>
+            </Col>
+          </Row>
+        </Container>
+      </BrowserRouter>
+    </Provider>
   );
 }
 
