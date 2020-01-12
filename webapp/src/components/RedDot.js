@@ -12,20 +12,21 @@ const Styles = styled.div`
     border-radius: 15px;
     background: red;
     transform: translateX(-50%);
+    z-index: 100;
   }
 `;
 
 export default function RedDot() {
   const [position, setPosition] = useState(0);
-  const [direction, setDirection] = useState(1);
+  const [direction, setDirection] = useState(0.3);
 
   const loop = useCallback(() => setPosition(position => {
-    if (position + direction === 100) {
-      setDirection(-1);
+    if (position + direction >= 100) {
+      setDirection(-0.3);
       return 100;
     };
-    if (position + direction === 0) {
-      setDirection(1);
+    if (position + direction <= 0) {
+      setDirection(0.3);
       return 0;
     };
     return position + direction;
