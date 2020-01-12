@@ -6,31 +6,48 @@ import { Switch, BrowserRouter, Route } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 import IdelView from './components/IdleView';
 import DetectionView from './components/DetectionView';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Navbar, Form } from 'react-bootstrap';
+import styled from 'styled-components';
+import Banner from './components/Banner';
+import DebugPanel from './components/DebugPanel';
+import ProgressBar from './components/ProgressBar';
+import UnlockView from './components/UnlockView';
 
 const history = createBrowserHistory();
 
+const Styles = styled.div`
+  position: fixed;
+  flex-direction: column;
+  left: 0;
+  top: 0;
+  display: flex;
+  height: 100%;
+  width: 100%;
+
+  .content {
+    flex-grow: 1;
+  }
+`;
+
 function App() {
   return (
-    <Provider store={store}>
-      <BrowserRouter history={history}>
-        <Container>
-          <Row>
-            <Col>
-              <h1>Tipsy</h1>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <Switch>
-                <Route path='/' exact component={IdelView} />
-                <Route path='/detect' exact component={DetectionView} />
-              </Switch>
-            </Col>
-          </Row>
-        </Container>
-      </BrowserRouter>
-    </Provider>
+    <Styles>
+      <Provider store={store}>
+        <BrowserRouter history={history}>
+          <Navbar bg="dark" variant="dark" className='justify-content-between'>
+            <Navbar.Brand>Tipsy</Navbar.Brand>
+            <Form inline><ProgressBar /></Form>
+          </Navbar>
+          <div className='content'>
+            <Switch>
+              <Route path='/' exact component={DetectionView} />
+            </Switch>
+          </div>
+          <Banner />
+        </BrowserRouter>
+        <DebugPanel />
+      </Provider>
+    </Styles>
   );
 }
 
