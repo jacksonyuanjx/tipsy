@@ -131,11 +131,14 @@ def stop_record():
     video_out.release()
     next_command = None
     print("attempting to upload video to GCP Bucket")
-    upload_blob("testnwhacks", "videos/processed.mp4", "testVideo2.mp4")
+    # upload_blob("testnwhacks", "videos/processed.mp4", "testVideo2.mp4")
     print("video has been uploaded")
-    analyze_labels("gs://testnwhacks/testVideo2.mp4")
+    # analyze_labels("gs://testnwhacks/testVideo2.mp4")
     print("ANALYSIS COMPLETE")
 
+def send_command(command_name, command_content={}):
+    global _whatsnext
+    _whatsnext = { 'command': command_name, content: command_content }
 
 class VideoTransformTrack(MediaStreamTrack):
     """
@@ -166,6 +169,7 @@ class VideoTransformTrack(MediaStreamTrack):
                     start_record()
                 if next_command == 'STOP_RECORD':
                     stop_record()
+                    send_command('TEST', 'STOP_RECORD')
             
             if video_out is not None:
                 video_out.write(img)
