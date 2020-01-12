@@ -8,6 +8,7 @@ import IdelView from './components/IdleView';
 import DetectionView from './components/DetectionView';
 import { Navbar } from 'react-bootstrap';
 import styled from 'styled-components';
+import Banner from './components/Banner';
 
 const history = createBrowserHistory();
 
@@ -39,6 +40,7 @@ function App() {
               <Route path='/detect' exact component={DetectionView} />
             </Switch>
           </div>
+          <Banner />
         </BrowserRouter>
       </Provider>
     </Styles>

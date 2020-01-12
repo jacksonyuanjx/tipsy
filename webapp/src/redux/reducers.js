@@ -11,4 +11,15 @@ const step = (state = 0, action) => {
   }
 }
 
-export default combineReducers({ step });
+const banner = (state = { type: 'none' }, action) => {
+  switch (action.type) {
+    case 'BANNER_CLEAR':
+      return { type: 'none' };
+    case 'BANNER_SET':
+      return { ...action.banner };
+    default:
+      return state;
+  }
+};
+
+export default combineReducers({ step, banner });
