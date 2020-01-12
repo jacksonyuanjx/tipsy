@@ -62,6 +62,7 @@ export default function DetectionView() {
   }, [step]);
 
   useEffect(() => {
+    if (step !== 0) return;
     const listener = e => {
       dispatch(bannerActions.set('primary', 'Facial Passed'))
       setTimeout(() => {
@@ -71,7 +72,7 @@ export default function DetectionView() {
     };
     window.addEventListener('keydown', listener)
     return () => window.removeEventListener('keydown', listener);
-  }, [dispatch])
+  }, [dispatch, step])
 
   return <Styles>
     {getViewForStep(step)}
