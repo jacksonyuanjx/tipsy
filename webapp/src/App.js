@@ -6,7 +6,7 @@ import { Switch, BrowserRouter, Route } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 import IdelView from './components/IdleView';
 import DetectionView from './components/DetectionView';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, Navbar } from 'react-bootstrap';
 
 const history = createBrowserHistory();
 
@@ -14,12 +14,10 @@ function App() {
   return (
     <Provider store={store}>
       <BrowserRouter history={history}>
+        <Navbar bg="dark" variant="dark">
+          <Navbar.Brand>Tipsy</Navbar.Brand>
+        </Navbar>
         <Container>
-          <Row>
-            <Col>
-              <h1>Tipsy</h1>
-            </Col>
-          </Row>
           <Row>
             <Col>
               <Switch>
