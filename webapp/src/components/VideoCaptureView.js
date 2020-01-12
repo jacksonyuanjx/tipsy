@@ -47,20 +47,6 @@ height: 100%;
     height: 100%;
     z-index: 2;
   }
-  .status-label {
-    position: absolute;
-    right: 1rem;
-    top: 1rem;
-    color: #000;
-    background: rgba(255, 255, 255, 0.7);
-    border-color: #000;
-    border-width: 1px;
-    border-style: solid;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-    border-radius: 0.3rem;
-    z-index: 3;
-  }
 }
 `;
 
@@ -179,7 +165,6 @@ export default function VideoCaptureView() {
           }
           return (
             <div className='video-wrapper'>
-              {recording && <span className='status-label'>Recording video</span>}
               <div className='spinner'>
                 <PushSpinner size={30} />
               </div>

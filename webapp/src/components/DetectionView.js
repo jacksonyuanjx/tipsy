@@ -4,6 +4,7 @@ import VideoCaptureView from './VideoCaptureView';
 import styled from 'styled-components';
 import UnlockView from './UnlockView';
 import RedDot from './RedDot';
+import RecordControl from './RecordControl';
 
 const Styles = styled.div`
   width: 100%;
@@ -28,7 +29,17 @@ export default function DetectionView() {
     }
   };
 
+  const getRecordControl = step => {
+    switch (step) {
+      case 1:
+        return <RecordControl key={step} />;
+      default:
+        return null;
+    }
+  };
+
   return <Styles>
     {getViewForStep(step)}
+    {getRecordControl(step)}
   </Styles>;
 }
