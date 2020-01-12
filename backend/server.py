@@ -17,6 +17,8 @@ from aiortc.contrib.media import MediaBlackhole, MediaPlayer, MediaRecorder
 from labels import analyze_labels
 from face import find_face
 import time
+
+from detect_face import gcpDetectFace
 # from pyimagesearch.motion_detection.singlemotiondetector import SingleMotionDetector
 # import imutils
 
@@ -170,6 +172,9 @@ class VideoTransformTrack(MediaStreamTrack):
                 if next_command == 'STOP_RECORD':
                     stop_record()
                     send_command('TEST', 'STOP_RECORD')
+                if next_command == 'CHECK_FACE':
+                    gcpDetectFace()
+                    send_command('FACIAL_RECOG', 'PASSED')
             
             if video_out is not None:
                 video_out.write(img)
