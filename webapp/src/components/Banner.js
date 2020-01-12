@@ -13,6 +13,8 @@ const Styles = styled.div`
   border: 3px solid #345;
   background: rgba(255, 255, 255, 0.8);
   border-radius: 1rem;
+  font-size: 2rem;
+  text-align: center;
 `;
 
 export default function Banner() {
