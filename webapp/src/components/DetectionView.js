@@ -62,13 +62,15 @@ export default function DetectionView() {
   }, [step]);
 
   useEffect(() => {
-    window.addEventListener('keydown', e => {
+    const listener = e => {
       dispatch(bannerActions.set('primary', 'Facial Passed'))
       setTimeout(() => {
         dispatch(bannerActions.clear)
         dispatch(stepActions.next)
       }, 3000);
-    })
+    };
+    window.addEventListener('keydown', listener)
+    return () => window.removeEventListener('keydown', listener);
   }, [dispatch])
 
   return <Styles>
