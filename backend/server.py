@@ -116,6 +116,9 @@ os.system('mkdir -p videos')
 video_out = None
 next_command = None
 
+# whatsnext
+_whatsnext = {}
+
 def start_record():
     global video_out
     global next_command
@@ -205,6 +208,12 @@ class VideoTransformTrack(MediaStreamTrack):
             return new_frame
         else:
             return frame
+
+async def whatsnext(request):
+    global _whatsnext
+    obj = json.loads(json.dumps(_whatsnext))
+    _whatsnext = {}
+    return web.json_response(obj)
 
 async def command(request):
     global next_command
@@ -316,6 +325,7 @@ if __name__ == "__main__":
     })
     cors.add(app.router.add_post("/offer", offer))
     cors.add(app.router.add_post("/command", command))
+    cors.add(app.router.add_get("/whatsnext", whatsnext))
 
     app.on_shutdown.append(on_shutdown)
     web.run_app(app, access_log=None, port=args.port, ssl_context=ssl_context)
