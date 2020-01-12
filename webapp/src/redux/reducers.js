@@ -6,6 +6,8 @@ const step = (state = 0, action) => {
       return state + 1;
     case 'STEP_RESET':
       return 0;
+    case 'STEP_UNLOCK':
+      return 3;
     default:
       return state;
   }

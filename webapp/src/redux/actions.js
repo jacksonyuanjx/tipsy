@@ -1,5 +1,6 @@
 export const stepActions = {
   next: { type: 'STEP_NEXT' },
+  unlock: { type: 'STEP_UNLOCK' },
 }
 
 export const bannerActions = {
@@ -23,6 +24,7 @@ export function serverAction(key) {
         dispatch(bannerActions.set('primary', 'Please Make sure your face is visible and complete.'));
         break;
       case 'UNLOCK_CAR':
+        dispatch(stepActions.unlock);
         break;
       case 'YOU_ARE_DRUNK':
         dispatch(bannerActions.set('failure', 'Sorry, you are drunk, you cannot drive today.'));

@@ -6,10 +6,12 @@ import { Switch, BrowserRouter, Route } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 import IdelView from './components/IdleView';
 import DetectionView from './components/DetectionView';
-import { Navbar } from 'react-bootstrap';
+import { Navbar, Form } from 'react-bootstrap';
 import styled from 'styled-components';
 import Banner from './components/Banner';
 import DebugPanel from './components/DebugPanel';
+import ProgressBar from './components/ProgressBar';
+import UnlockView from './components/UnlockView';
 
 const history = createBrowserHistory();
 
@@ -32,13 +34,13 @@ function App() {
     <Styles>
       <Provider store={store}>
         <BrowserRouter history={history}>
-          <Navbar bg="dark" variant="dark">
+          <Navbar bg="dark" variant="dark" className='justify-content-between'>
             <Navbar.Brand>Tipsy</Navbar.Brand>
+            <Form inline><ProgressBar /></Form>
           </Navbar>
           <div className='content'>
             <Switch>
-              <Route path='/' exact component={IdelView} />
-              <Route path='/detect' exact component={DetectionView} />
+              <Route path='/' exact component={DetectionView} />
             </Switch>
           </div>
           <Banner />
