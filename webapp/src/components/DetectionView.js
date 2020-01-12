@@ -130,7 +130,7 @@ export default function DetectionView() {
     }).then(function () {
       var offer = pc.localDescription;
 
-      return fetch('http://localhost:8080/offer', {
+      return fetch('http://34.83.245.238:8080/offer', {
         body: JSON.stringify({
           sdp: offer.sdp,
           type: offer.type,
