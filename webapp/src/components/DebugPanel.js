@@ -28,6 +28,8 @@ const buttons = [
   'UNLOCK_CAR',
   'YOU_ARE_DRUNK',
   'RETRY_STEP',
+  'START_RECORD',
+  'END_RECORD',
 ]
 
 export default function DebugPanel() {

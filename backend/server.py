@@ -98,6 +98,25 @@ def blob_process(img, threshold, detector):
 		print("Response (strength): ", kp.response) # FIXME: always 0.0 for some reason?
 	return keypoints
 
+
+# prepare for video outputing
+os.system('mkdir -p videos')
+video_out = None
+next_command = None
+
+def start_record():
+    global video_out
+    global next_command
+    video_out = cv2.VideoWriter('videos/processed.mp4', cv2.VideoWriter_fourcc(*'MP4V'), 20.0, (640,480))
+    next_command = None
+
+def stop_record():
+    global video_out
+    global next_command
+    video_out.release()
+    next_command = None
+
+
 class VideoTransformTrack(MediaStreamTrack):
     """
     A video stream track that transforms frames from an another track.
@@ -111,12 +130,25 @@ class VideoTransformTrack(MediaStreamTrack):
         self.transform = transform
 
     async def recv(self):
+        global video_out
+        global next_command
+
         frame = await self.track.recv()
 
         if self.transform == "edges":
             # perform edge detection
             img = frame.to_ndarray(format="bgr24")
             img = cv2.cvtColor(cv2.Canny(img, 100, 200), cv2.COLOR_GRAY2BGR)
+
+            # save to file
+            if next_command is not None:
+                if next_command == 'START_RECORD':
+                    start_record()
+                if next_command == 'STOP_RECORD':
+                    stop_record()
+            
+            if video_out is not None:
+                video_out.write(img)
 
             # rebuild a VideoFrame, preserving timing information
             new_frame = VideoFrame.from_ndarray(img, format="bgr24")
@@ -155,6 +187,11 @@ class VideoTransformTrack(MediaStreamTrack):
         else:
             return frame
 
+async def command(request):
+    global next_command
+    params = await request.json()
+    print(params)
+    next_command = params['command']
 
 async def offer(request):
     params = await request.json()
@@ -259,6 +296,7 @@ if __name__ == "__main__":
         )
     })
     cors.add(app.router.add_post("/offer", offer))
+    cors.add(app.router.add_post("/command", command))
 
     app.on_shutdown.append(on_shutdown)
     web.run_app(app, access_log=None, port=args.port, ssl_context=ssl_context)

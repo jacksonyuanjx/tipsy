@@ -1,3 +1,5 @@
+import { HOST } from '../config';
+
 export const stepActions = {
   next: { type: 'STEP_NEXT' },
   unlock: { type: 'STEP_UNLOCK' },
@@ -33,6 +35,28 @@ export function serverAction(key) {
       case 'RETRY_STEP':
         dispatch(bannerActions.set('warning', 'Sorry, please retry this step.'));
         window.setTimeout(() => dispatch(serverAction('RESET')), 3000);
+        break;
+      case 'START_RECORD':
+        fetch(`http://${HOST}:8080/command`, {
+          body: JSON.stringify({
+            command: 'START_RECORD'
+          }),
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          method: 'POST'
+        })
+        break;
+      case 'END_RECORD':
+        fetch(`http://${HOST}:8080/command`, {
+          body: JSON.stringify({
+            command: 'STOP_RECORD'
+          }),
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          method: 'POST'
+        })
         break;
       default:
         break;

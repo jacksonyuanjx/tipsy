@@ -2,6 +2,7 @@ import React, { useState, useCallback, useRef } from 'react';
 import MediaCapturer from 'react-multimedia-capture';
 import styled from 'styled-components';
 import { PushSpinner } from "react-spinners-kit";
+import { HOST } from '../config';
 
 var pc = null;
 
@@ -26,7 +27,16 @@ height: 100%;
     left: 1rem;
     bottom: 1rem;
     width: 20%;
+    height: 20%;
     z-index: 3;
+  }
+  .local-processed-canvas {
+    position: absolute;
+    right: 1rem;
+    bottom: 1rem;
+    width: 20%;
+    z-index: 3;
+    background: #000;
   }
   .processed-video {
     position: absolute;
@@ -55,6 +65,7 @@ height: 100%;
 `;
 
 export default function VideoCaptureView() {
+  const canvasRef = useRef();
   const [recording, setRecording] = useState(false);
 
   const videoRef = useRef();
@@ -120,7 +131,7 @@ export default function VideoCaptureView() {
     }).then(function () {
       var offer = pc.localDescription;
 
-      return fetch('http://34.83.245.238:8080/offer', {
+      return fetch(`http://${HOST}:8080/offer`, {
         body: JSON.stringify({
           sdp: offer.sdp,
           type: offer.type,
@@ -174,6 +185,7 @@ export default function VideoCaptureView() {
               </div>
               <video className='raw-video' ref={videoRef} autoPlay></video>
               <video className='processed-video' ref={receivedVideoRef} autoPlay></video>
+              <canvas className='local-processed-canvas' ref={canvasRef} ></canvas>
             </div>
           )
         }} />
