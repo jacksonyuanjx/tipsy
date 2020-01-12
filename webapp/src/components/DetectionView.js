@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import VideoCaptureView from './VideoCaptureView';
 import styled from 'styled-components';
 import UnlockView from './UnlockView';
+import RedDot from './RedDot';
 
 const Styles = styled.div`
   width: 100%;
@@ -16,8 +17,12 @@ export default function DetectionView() {
     switch (step) {
       case 0:
       case 1:
-      case 2:
         return <VideoCaptureView />;
+      case 2:
+        return <>
+          <VideoCaptureView />
+          <RedDot />
+        </>;
       default:
         return <UnlockView />;
     }
