@@ -1,10 +1,12 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import VideoCaptureView from './VideoCaptureView';
 import styled from 'styled-components';
 import UnlockView from './UnlockView';
 import RedDot from './RedDot';
 import RecordControl from './RecordControl';
+import { serverAction } from '../redux/actions';
+import { HOST } from '../config';
 
 const Styles = styled.div`
   width: 100%;
@@ -37,6 +39,27 @@ export default function DetectionView() {
         return null;
     }
   };
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    window.setInterval(() => {
+      dispatch(serverAction('POLL'))
+    }, 500);
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (step === 0) {
+      fetch(`http://${HOST}:8080/command`, {
+        body: JSON.stringify({
+          command: 'CHECK_FACE'
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        method: 'POST'
+      })
+    }
+  }, [step]);
 
   return <Styles>
     {getViewForStep(step)}

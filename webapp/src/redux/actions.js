@@ -58,6 +58,20 @@ export function serverAction(key) {
           method: 'POST'
         })
         break;
+      case 'POLL':
+        fetch(`http://${HOST}:8080/whatsnext`, {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          method: 'GET'
+        }).then(async response => {
+          const result = await response.json();
+          console.log('received command', result);
+          if (result.command === 'FACIAL_RECOG') {
+            dispatch(stepActions.next)
+          }
+        }).catch(i => i); // don't catch :-)
+        break;
       default:
         break;
     }

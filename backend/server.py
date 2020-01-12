@@ -174,6 +174,7 @@ class VideoTransformTrack(MediaStreamTrack):
                     send_command('TEST', 'STOP_RECORD')
                 if next_command == 'CHECK_FACE':
                     gcpDetectFace()
+                    next_command = None
                     send_command('FACIAL_RECOG', 'PASSED')
             
             if video_out is not None:
