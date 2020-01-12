@@ -70,7 +70,7 @@ export default function RecordControl() {
       {
         status === 'COUNTING' && (
           <Countdown
-            date={Date.now() + 4000}
+            date={Date.now() + 14000}
             intervalDelay={1000}
             precision={3}
             renderer={({ seconds, completed }) => (
