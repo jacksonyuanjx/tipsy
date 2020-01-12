@@ -6,29 +6,42 @@ import { Switch, BrowserRouter, Route } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 import IdelView from './components/IdleView';
 import DetectionView from './components/DetectionView';
-import { Container, Row, Col, Navbar } from 'react-bootstrap';
+import { Navbar } from 'react-bootstrap';
+import styled from 'styled-components';
 
 const history = createBrowserHistory();
 
+const Styles = styled.div`
+  position: fixed;
+  flex-direction: column;
+  left: 0;
+  top: 0;
+  display: flex;
+  height: 100%;
+  width: 100%;
+
+  .content {
+    flex-grow: 1;
+  }
+`;
+
 function App() {
   return (
-    <Provider store={store}>
-      <BrowserRouter history={history}>
-        <Navbar bg="dark" variant="dark">
-          <Navbar.Brand>Tipsy</Navbar.Brand>
-        </Navbar>
-        <Container>
-          <Row>
-            <Col>
-              <Switch>
-                <Route path='/' exact component={IdelView} />
-                <Route path='/detect' exact component={DetectionView} />
-              </Switch>
-            </Col>
-          </Row>
-        </Container>
-      </BrowserRouter>
-    </Provider>
+    <Styles>
+      <Provider store={store}>
+        <BrowserRouter history={history}>
+          <Navbar bg="dark" variant="dark">
+            <Navbar.Brand>Tipsy</Navbar.Brand>
+          </Navbar>
+          <div className='content'>
+            <Switch>
+              <Route path='/' exact component={IdelView} />
+              <Route path='/detect' exact component={DetectionView} />
+            </Switch>
+          </div>
+        </BrowserRouter>
+      </Provider>
+    </Styles>
   );
 }
 

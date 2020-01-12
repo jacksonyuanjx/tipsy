@@ -1,12 +1,24 @@
 import React, { useState, useCallback, useRef } from 'react';
 import MediaCapturer from 'react-multimedia-capture';
 import styled from 'styled-components';
+import { PushSpinner } from "react-spinners-kit";
 
 var pc = null;
 
 const Styles = styled.div`
+height: 100%;
+> * {
+  height: 100%;
+}
 .video-wrapper {
-  position: relative;
+  height: 100%;
+  background: #000;
+  .spinner {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%);
+  }
   .raw-video {
     position: absolute;
     left: 1rem;
@@ -15,6 +27,7 @@ const Styles = styled.div`
   }
   .processed-video {
     width: 100%;
+    height: 100%;
   }
   .status-label {
     position: absolute;
@@ -147,9 +160,11 @@ export default function VideoCaptureView() {
           return (
             <div className='video-wrapper'>
               {recording && <span className='status-label'>Recording video</span>}
+              <div className='spinner'>
+                <PushSpinner size={30} />
+              </div>
               <video className='raw-video' ref={videoRef} autoPlay></video>
               <video className='processed-video' ref={receivedVideoRef} autoPlay></video>
-              <hr />
             </div>
           )
         }} />
