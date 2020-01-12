@@ -14,6 +14,15 @@ from av import VideoFrame
 from aiortc import MediaStreamTrack, RTCPeerConnection, RTCSessionDescription
 from aiortc.contrib.media import MediaBlackhole, MediaPlayer, MediaRecorder
 
+from labels import analyze_labels
+from face import find_face
+import time
+# from pyimagesearch.motion_detection.singlemotiondetector import SingleMotionDetector
+# import imutils
+
+from google.cloud import storage
+
+
 ROOT = os.path.dirname(__file__)
 
 logger = logging.getLogger("pc")
@@ -35,6 +44,9 @@ detector_params.maxArea = 300;
 detector_params.filterByColor = True;
 detector_params.blobColor = 0; # 0 for dark blobs & 255 for light blobs
 detector = cv2.SimpleBlobDetector_create(detector_params)
+
+
+from gcpBucketHelper import upload_blob
 
 
 def detect_faces(img, cascade):
@@ -171,7 +183,9 @@ class VideoTransformTrack(MediaStreamTrack):
                         keypoints = blob_process(eye, 50, detector)
                         eye = cv2.drawKeypoints(eye, keypoints, eye, (0, 0, 255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
                         return eye;
-
+        elif self.transform == "face":
+            img = frame.to_ndarray(format="bgr24")
+            find_face(img)
         elif self.transform == "rotate":
             # rotate image
             img = frame.to_ndarray(format="bgr24")
