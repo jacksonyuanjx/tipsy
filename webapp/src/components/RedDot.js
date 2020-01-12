@@ -4,7 +4,16 @@ import { useDispatch } from 'react-redux';
 import { bannerActions } from '../redux/actions';
 
 const Styles = styled.div`
-  div {
+  .mask {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 2;
+  }
+  .dot {
     position: fixed;
     top: 50%;
     width: 30px;
@@ -48,7 +57,8 @@ export default function RedDot() {
 
   return (
     <Styles>
-      <div style={{ left: `${position}%` }}></div>
+      <div className='mask' />
+      <div className='dot' style={{ left: `${position}%` }}></div>
     </Styles>
   )
 }
